@@ -12,7 +12,10 @@ import (
 func TestServer_HandleUsersCreate(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodPost, "/users", nil)
-	s := newServer(teststore.New())
+	s, err := newServer(teststore.New(), NewConfig())
+	if err != nil {
+		t.Fatal(err)
+	}
 	s.ServeHTTP(rec, req)
 	assert.Equal(t, http.StatusOK, rec.Code)
 }

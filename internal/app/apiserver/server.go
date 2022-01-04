@@ -9,21 +9,27 @@ import (
 )
 
 type server struct {
+	config *Config
 	router *mux.Router
 	logger *logrus.Logger
 	store  store.Store
 }
 
-func newServer(store store.Store) *server {
+func newServer(store store.Store, config *Config) (*server, error) {
 	s := &server{
+		config: config,
 		router: mux.NewRouter(),
 		logger: logrus.New(),
 		store:  store,
 	}
 
+	if err := s.configureLogger(); err != nil {
+		return nil, err
+	}
+
 	s.configureRouter()
 
-	return s
+	return s, nil
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -38,4 +44,16 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 	}
+}
+
+func (s *server) configureLogger() error {
+	// level, err := logrus.ParseLevel(s.config.LogLevel)
+	level, err := logrus.ParseLevel("debug")
+	if err != nil {
+		return err
+	}
+
+	s.logger.SetLevel(level)
+
+	return nil
 }
