@@ -3,14 +3,12 @@ set -e
 
 case "$1" in
     start)
-        echo "coool"
         make
         ;;
     dev)
-        echo "cool"
         make
         make migrations_up
-        ./apiserver
+        CompileDaemon --build="make" --command=./apiserver
         ;;
     pg_db)
         psql -U postgres -c "CREATE DATABASE restapi_test;"
