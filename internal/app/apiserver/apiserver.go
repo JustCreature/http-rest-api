@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/JustCreature/http-rest-api/internal/app/store/sqlstore"
+	"github.com/gorilla/sessions"
 )
 
 // Start ...
@@ -17,7 +18,8 @@ func Start(config *Config) error {
 	defer db.Close()
 
 	store := sqlstore.New(db)
-	srv, err := newServer(store, config)
+	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+	srv, err := newServer(store, config, sessionStore)
 	if err != nil {
 		return err
 	}
