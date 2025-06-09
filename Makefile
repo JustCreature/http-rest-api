@@ -1,5 +1,6 @@
 .PHONY: build
 build:
+	git config --global --add safe.directory /code
 	go build -v ./cmd/apiserver
 
 .PHONY: test

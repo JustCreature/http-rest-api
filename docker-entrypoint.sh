@@ -8,7 +8,7 @@ case "$1" in
     dev)
         make
         make migrations_up
-        CompileDaemon --build="make" --command=./apiserver
+        $(go env GOPATH)/bin/CompileDaemon --build="make" --command=./apiserver
         ;;
     pg_db)
         psql -U postgres -c "CREATE DATABASE restapi_test;"
